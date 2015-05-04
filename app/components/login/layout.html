@@ -1,0 +1,42 @@
+<div class="loginpanel">
+	<form name="loginFrm" class="loginfrm" ng-submit="login(loginFrm.user, loginFrm.pass)" ng-controller="LoginController">
+		<div class="row">
+			<div class="large-12 columns animate0 bounceIn">
+				<!-- <h1>{{labels.loginCaption}}</h1> -->
+				<img ng-src="assets/images/Standard_Poors.jpg" >
+				<div> <h4>{{labels.homeTitle}}</h4> </div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="small-12 columns">&nbsp;</div>
+		</div>
+
+		<div class="login-flds">
+			<div class="row login-alert" ng-show="loginFrm.loginError">
+				<div class="small-12 columns alert-error">{{labels.badCredentials}}</div>
+			</div>
+
+			<div class="row login-alert" ng-show="loginFrm.serverError">
+				<div class="small-12 columns alert-error">{{labels.serverError}}</div>
+			</div>
+
+			<div class="row">
+				<div class="small-12 columns animate1 bounceIn">
+					<input type="text" name="IoT-username" required ng-model="loginFrm.user" autocapitalize="off" placeholder="{{labels.user}}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="small-12 columns animate2 bounceIn">
+					<input type="password" name="IoT-password" ng-model="loginFrm.pass" autocapitalize="off" placeholder="{{labels.pass}}" required >
+				</div>
+			</div>
+			<div class="row">
+				<div class="small-12 columns animate3 bounceIn">
+					<input type="submit" class="button small expand" value="{{labels.login | uppercase}}" required>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

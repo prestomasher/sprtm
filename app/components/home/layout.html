@@ -1,0 +1,174 @@
+<div>
+	<div class="row">
+		<div class="small-12 medium-12 large-12 columns">
+			<div class="lfw-panel lfw-panel-primary lfw-panel-alt">
+				<div class="lfw-panel-heading">
+					<!-- split header -->  	
+					<div class="row">
+						<div class="columns small-8 medium-8 large-8">
+							<h3 class="lfw-panel-title"> {{labels.mapTitle}} </h3>
+							<p> {{labels.mapSubtitle}} </p>
+						</div>
+
+						<div class="columns small-4 medium-4 large-4">
+							<div class="text-left">
+								<h3 class="lfw-panel-title"> {{labels.mapStatsTitle}} </h3>
+								<p> {{labels.mapStatsSubtitle}} </p>
+							</div>
+						</div>
+					</div>				
+				</div>
+				
+				<div class="lfw-panel-body no-padding">
+					
+					<div class="row">
+						<!-- map -->
+						<div class="columns small-8 medium-8 large-8">
+							<div class="alerts-map" id="alertsMap"></div>
+						</div>
+
+<!-- map KPI (progress bar) -->
+						<div class="columns small-4 medium-4 large-4">
+							
+							<div class="v-spacer" ng-repeat="kpiGrp in dbData.data.mapKPI">
+								<h3 class="lfw-panel-title"> {{kpiGrp.grpTitle}} </h3>
+
+									<div class="progress-container" ng-repeat="kpi in kpiGrp.grpData" ng-click="viewViolationsDetail( kpi.name )">
+
+										<div class="accent-highlight size-12"> 
+											<i class="{{kpi.icon}} size-16"></i> {{kpi.name}}
+											<span> ( {{kpi.value}} ) </span> 
+										</div>
+										<div>
+											<div class="progress alert radius small-12" style="overflow:hidden;">
+											  <span class="meter animated slideInLeft" style="width: {{kpi.percent | number:0}}%"></span>
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+
+				<div class="lfw-panel-footer">					 
+					<div class="row collapse">
+					<!-- severity legend --> 
+						<div class="columns small-12 medium-12 large-12">
+							<div class="legend">
+								<div>{{labels.mapLegendTitle}}</div>
+
+								<div class="legend-item" ng-model="normalClicked" ng-click="normalClicked = !normalClicked; toggleVisibility( 'green' )">
+									<label class="legend-text" ng-class="{ 'legend-off': normalClicked }"> 
+									{{labels.mapLegendSeries1}}
+										<div class="legend-color-item success"></div>
+									</label>
+								</div>
+
+								<div class="legend-item" ng-model="warningClicked" ng-click="warningClicked = !warningClicked; toggleVisibility( 'yellow' )"> 
+									<label class="legend-text" ng-class="{ 'legend-off': warningClicked }"> {{labels.mapLegendSeries2}}
+										<div class="legend-color-item warning"></div>						
+									</label>
+								</div>
+
+								<div class="legend-item" ng-model="alertClicked" ng-click="alertClicked = !alertClicked; toggleVisibility( 'red' )"> 
+									<label class="legend-text" ng-class="{ 'legend-off': alertClicked }"> 
+									{{labels.mapLegendSeries3}}
+										<div class="legend-color-item alert"></div>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+
+ 	
+	<div class="row">
+<!-- IYF (In Yo'Face) widget -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+		<div class="small-12 medium-5 large-4 columns">
+			<div class="lfw-panel lfw-panel-primary lfw-panel-alt">
+				<div class="lfw-panel-heading">
+					<h3 class="lfw-panel-title"> {{labels.bigStatsTitle}} {{labels.bigStatsSubtitle}} </h3>
+					<p> 
+						{{labels.bigStatsFooterText}}  <span class="accent-highlight"> {{dbData.data.iyf.city | uppercase}} </span>
+					</p>
+				</div>
+
+				<div class="lfw-panel-body no-padding">
+					<div 
+						class="row widget-panel" 
+						ng-repeat="detail in dbData.data.iyf.groupItems">
+				
+						<div class="animated fadeInLeft" ng-click="showAlertsByAlertType(detail)">
+							<!-- icon -->
+							<div class="columns small-2 medium-2 large-2 text-center">
+								<div class="status-icon {{detail.color}}">
+									<i class="{{detail.icon}}"></i>
+								</div>
+							</div>
+
+							<!-- big numbers -->
+							<div class="columns small-5 medium-5 large-5">
+								<h1 class="big-kpi"> {{detail.value}} </h1>
+							</div>
+
+							<!-- stats -->
+							<div class="columns small-5 medium-5 large-5">
+								<span ng-bind-html="detail.stats"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="lfw-panel-footer">
+					
+				</div>
+			</div>	
+		</div>
+
+		<!-- alerts grid --> 
+		<div class="columns small-12 medium-7 large-8">
+			<div class="lfw-panel lfw-panel-primary lfw-panel-alt">
+				<div class="lfw-panel-heading">
+
+					<h3 class="lfw-panel-title"> {{labels.homeGridTitle}} </h3>
+					<p> <span class="accent-highlight">{{dbData.metadata.paginator.totalItems}}</span> {{labels.homeGridSubtitle}} <span class="warning">warning</span>.</p>
+				</div>
+
+				<div class="lfw-panel-body grid-body">
+					<table>
+						<thead>
+							<tr>
+								<th class="text-center">{{labels.gridCol1}}</th>
+								<th class="text-center">{{labels.gridCol2}}</th>
+								<th class="text-center">{{labels.gridCol3}}</th>
+								<th class="text-center">{{labels.gridCol4}}</th>
+								<th class="text-center">{{labels.gridCol5}}</th>
+								<th class="text-center">{{labels.gridCol6}}</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<!-- offset function is declared in LayoutController -->
+							<tr ng-repeat="data in dbData.data.grid.detail | offset: (dbData.metadata.paginator.currentPage * dbData.metadata.paginator.itemsPerPage) - dbData.metadata.paginator.itemsPerPage | limitTo: dbData.metadata.paginator.itemsPerPage">							
+								<td>{{data.col1}}</td>
+								<td>{{data.col2}}</td>
+								<td>{{data.col3}}</td>
+								<td>{{data.col4}}</td>
+								<td>{{data.col5}}</td>
+								<td>{{data.col6}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="lfw-panel-footer">
+					<pagination total-items="dbData.metadata.paginator.totalItems" page="dbData.metadata.paginator.currentPage" items-per-page="dbData.metadata.paginator.itemsPerPage" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
